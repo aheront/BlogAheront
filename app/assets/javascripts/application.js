@@ -13,5 +13,9 @@
 //= require bootstrap
 //= require jquery
 //= require jquery_ujs
+//= require jquery-fileupload
 //= require turbolinks
+//= require react
+//= require react_ujs
+//= require components
 //= require_tree .

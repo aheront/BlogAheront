@@ -4,17 +4,34 @@ class PostsController < ApplicationController
   # GET /posts
   # GET /posts.json
   def index
-    @posts = Post.all
+    @category = Category.find(params[:category_id])
+    @posts = @category.posts.order(created_at: :desc)
+
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json { render json: @posts.map{|upload| upload.to_jq_upload } }
+    end
   end
 
   # GET /posts/1
   # GET /posts/1.json
   def show
+    @post = Post.find(params[:id])
+
+    respond_to do |format|
+      format.html # show.html.erb
+      format.json { render json: @post }
+    end
   end
 
   # GET /posts/new
   def new
     @post = Post.new
+    @post.category_id = params[:category_id]
+    respond_to do |format|
+      format.html # new.html.erb
+      format.json { render json: @post }
+    end
   end
 
   # GET /posts/1/edit
@@ -25,13 +42,15 @@ class PostsController < ApplicationController
   # POST /posts.json
   def create
     @post = Post.new(post_params)
-
+    @post.category_id = params[:category_id]
     respond_to do |format|
       if @post.save
-        format.html { redirect_to @post, notice: 'Post was successfully created.' }
-        format.json { render :show, status: :created, location: @post }
+        format.html {
+          redirect_to category_post_url(@post.category,@post) , notice: 'Post was successfully created.'
+        }
+        format.json { render json: {files: [@post.to_jq_upload]}, status: :created, location: @post }
       else
-        format.html { render :new }
+        format.html { render action: "new" }
         format.json { render json: @post.errors, status: :unprocessable_entity }
       end
     end
@@ -56,7 +75,7 @@ class PostsController < ApplicationController
   def destroy
     @post.destroy
     respond_to do |format|
-      format.html { redirect_to posts_url, notice: 'Post was successfully destroyed.' }
+      format.html { redirect_to category_posts_url(@category), notice: 'Post was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -64,11 +83,12 @@ class PostsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_post
+      @category = Category.find(params[:category_id])
       @post = Post.find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def post_params
-      params.require(:post).permit(:name, :content, :category_id)
+      params.require(:post).permit(:name, :content, :category_id,:file)
     end
 end

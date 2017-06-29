@@ -1,4 +1,4 @@
-= form_for @post, html: { class: "form form-horizontal post" } do |f|
+= form_for [@post.category, @post],  html: { class: "form form-horizontal post" } do |f|
   .form-group
     = f.label :name, class: 'control-label col-lg-2'
     .col-lg-10
@@ -10,11 +10,11 @@
       = f.text_field :content, class: 'form-control', required: true
     = f.error_span(:content)
   .form-group
-    = f.label :category_id, class: 'control-label col-lg-2'
+    = f.label 'Add files...', class: 'control-label col-lg-2'
     .col-lg-10
-      = f.text_field :category_id, class: 'form-control', required: true
-    = f.error_span(:category_id)
+      = f.file_field :file
+    = f.error_span(:file)
   .form-group
-    .col-lg-offset-2.col-lg-10
+    .col-lg-10
       = f.submit nil,class: 'btn btn-primary'
-      = link_to t('.cancel', :default => t("helpers.links.cancel")), posts_path, :class => 'btn btn-default'
+      = link_to t('.cancel', :default => t("helpers.links.cancel")), path: category_posts_path(@post.category_id), :class => 'btn btn-default'

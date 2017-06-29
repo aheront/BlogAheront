@@ -64,4 +64,5 @@ gem 'paperclip'
 gem 'jquery-fileupload-rails'
 gem 'record_tag_helper'
 gem 'twitter-bootstrap-rails'
+gem 'react-rails'
 
