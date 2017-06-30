@@ -1,17 +1,10 @@
 class Post < ApplicationRecord
   belongs_to :category
-  has_many :comments, dependent: :destroy
+  has_many :comments, as: :source,dependent: :destroy
 
   has_attached_file :file
-  validates_attachment_content_type :file, :content_type => %w(image/jpeg image/jpg)
+  do_not_validate_attachment_file_type :file
+  validates_with AttachmentSizeValidator, attributes: :file, less_than: 2.megabytes
+  validates_presence_of :name, :content
 
-  def to_jq_upload
-    {
-        'name' => read_attribute(:file_name),
-        'size' => read_attribute(:file_size),
-        'url' => file.url(:original),
-        'delete_url' => file.path(self),
-        'delete_type' => "DELETE"
-    }
-  end
 end

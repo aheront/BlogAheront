@@ -5,8 +5,10 @@ class PostsController < ApplicationController
   # GET /posts.json
   def index
     @category = Category.find(params[:category_id])
+    @comments = @category.comments
     @posts = @category.posts.order(created_at: :desc)
-
+    @source = @category
+    @comment = Comment.new(source: @source)
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @posts.map{|upload| upload.to_jq_upload } }
@@ -17,7 +19,7 @@ class PostsController < ApplicationController
   # GET /posts/1.json
   def show
     @post = Post.find(params[:id])
-
+    @comment = Comment.new(source: @post)
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @post }
@@ -48,7 +50,6 @@ class PostsController < ApplicationController
         format.html {
           redirect_to category_post_url(@post.category,@post) , notice: 'Post was successfully created.'
         }
-        format.json { render json: {files: [@post.to_jq_upload]}, status: :created, location: @post }
       else
         format.html { render action: "new" }
         format.json { render json: @post.errors, status: :unprocessable_entity }
@@ -61,7 +62,7 @@ class PostsController < ApplicationController
   def update
     respond_to do |format|
       if @post.update(post_params)
-        format.html { redirect_to @post, notice: 'Post was successfully updated.' }
+        format.html { redirect_to category_post_url(@post.category,@post), notice: 'Post was successfully updated.' }
         format.json { render :show, status: :ok, location: @post }
       else
         format.html { render :edit }
@@ -70,8 +71,6 @@ class PostsController < ApplicationController
     end
   end
 
-  # DELETE /posts/1
-  # DELETE /posts/1.json
   def destroy
     @post.destroy
     respond_to do |format|
@@ -91,4 +90,5 @@ class PostsController < ApplicationController
     def post_params
       params.require(:post).permit(:name, :content, :category_id,:file)
     end
+
 end

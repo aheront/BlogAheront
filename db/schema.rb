@@ -26,8 +26,10 @@ ActiveRecord::Schema.define(version: 20170629112700) do
     t.string   "author"
     t.text     "content"
     t.integer  "post_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string   "source_type"
+    t.integer  "source_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
     t.index ["post_id"], name: "index_comments_on_post_id", using: :btree
   end
 

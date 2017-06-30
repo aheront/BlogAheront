@@ -58,11 +58,12 @@ group :development, :test do
 end
 
 gem 'haml-rails'
-gem 'bootstrap-generators'
 
 gem 'paperclip'
-gem 'jquery-fileupload-rails'
 gem 'record_tag_helper'
+gem 'bootstrap-sass'
 gem 'twitter-bootstrap-rails'
-gem 'react-rails'
+gem 'autoprefixer-rails'
+
+
 

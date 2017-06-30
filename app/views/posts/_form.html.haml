@@ -17,4 +17,4 @@
   .form-group
     .col-lg-10
       = f.submit nil,class: 'btn btn-primary'
-      = link_to t('.cancel', :default => t("helpers.links.cancel")), path: category_posts_path(@post.category_id), :class => 'btn btn-default'
+      = link_to t('.cancel', :default => t("helpers.links.cancel")), category_posts_path(@post.category), :class => 'btn btn-default'

@@ -2,23 +2,36 @@
   %h1= @category.name
   %p
     = @category.description
-    = link_to t('.new', :default => t("helpers.links.new")), new_category_post_path(), :class => 'btn btn-primary'
+    = link_to 'New post', new_category_post_path(), :class => 'btn btn-primary'
 %br
-- @posts.each do |post|
   .row
-    .col-lg-12{ class: 'panel panel-default',style:'padding:15px;'}
-      %div{ class: 'panel-body'}
-        .col-lg-11
+    - @posts.each do |post|
+      .col-md-4
+        .panel.panel-default.panel-body
           %h3
             = link_to post.name, category_post_path(@category,post)
           %p= post.content.truncate(255)
           - if post.file.present?
-            %p= image_tag post.file.url
-          =link_to :new_comment, new_category_post_comment_path(@category,post)
-          -post.comments.each do |c|
-            =c.author
+            %p= link_to post.file_file_name, post.file.url
           %br
           = link_to t('.show', :default => t("helpers.links.show")), category_post_path(post.category_id,post), :class => 'btn btn-default btn-xs'
           = link_to t('.edit', :default => t("helpers.links.edit")), edit_category_post_path(post.category_id,post), :class => 'btn btn-default btn-xs'
           = link_to t('.destroy', :default => t("helpers.links.destroy")), category_post_path(post.category_id,post), :method => :delete, :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) }, :class => 'btn btn-xs btn-danger'
+= tag "input", { "id" => "show", "type" => "button", "value" => "Add comment", "onclick" => "addComment()" }
+%h4#comments-count
+  This category has
+  = pluralize(@category.comments.count, 'comment')
+#comment-form
+  =render 'comments/comment_form', locals: {source: @category}
+#comments-list
+  = render partial: @category.reload.comments.order(created_at: :desc)
+:javascript
+  $(document).onload(
+  $("#comment-form").hide()
+  );
+  function addComment(){
+  $("#comment-form").show()
+  $("#comment-form.form-group").val('')
+  $("#show").hide()
+  };
 

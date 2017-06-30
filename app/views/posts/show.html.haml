@@ -1,7 +1,6 @@
 - model_class = Post
 .page-header
   %h1=t '.title', :default => model_class.model_name.human.titleize
-
 %p
   %strong= model_class.human_attribute_name(:name) + ':'
   %br
@@ -12,10 +11,25 @@
   = @post.content
 -if @post.file.present?
   %p
-    %strong= model_class.human_attribute_name(:file) + ':'
-    %br
-      = image_tag @post.file.url
-
+    = link_to @post.file_file_name, @post.file.url
 = link_to t('.back', :default => t("helpers.links.back")), category_posts_path(@post.category_id), :class => 'btn btn-default'
 = link_to t('.edit', :default => t("helpers.links.edit")), edit_category_post_path(@post.category_id,@post), :class => 'btn btn-default'
 = link_to t('.destroy', :default => t("helpers.links.destroy")), category_post_path(@post.category_id,@post), :method => "delete", :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) }, :class => 'btn btn-danger'
+= tag "input", { "id" => "show", "type" => "button", "value" => "Add comment", "onclick" => "addComment()" }
+%h4#comments-count
+  This article has
+  = pluralize(@post.comments.count, 'comment')
+#comment-form
+  =render 'comments/comment_form',  locals: {comment: @comment}
+#comments-list
+  = render partial: @post.reload.comments.order(created_at: :desc)
+
+:javascript
+  $(document).onload(
+  $("#comment-form").hide()
+  );
+  function addComment(){
+  $("#comment-form").show();
+  $("#comment-form.form-group").val('');
+  $("#show").hide();
+  };
