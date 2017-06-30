@@ -7,14 +7,14 @@
   .form-group
     = f.label :content, class: 'control-label col-lg-2'
     .col-lg-10
-      = f.text_field :content, class: 'form-control', required: true
+      = f.text_area :content, class: 'form-control', required: true
     = f.error_span(:content)
   .form-group
     = f.label 'Add files...', class: 'control-label col-lg-2'
     .col-lg-10
       = f.file_field :file
-    = f.error_span(:file)
+      = f.error_span(:file)
   .form-group
-    .col-lg-10
+    .col-lg-offset-2.col-lg-10
       = f.submit nil,class: 'btn btn-primary'
       = link_to t('.cancel', :default => t("helpers.links.cancel")), category_posts_path(@post.category), :class => 'btn btn-default'

@@ -5,13 +5,14 @@
       .col-lg-10
         = f.text_field :author, class: 'form-control', required: true
         = f.error_span(:author)
+        %br
     .form-group
       = f.label :content, class: 'control-label col-lg-2'
       .col-lg-10
-        = f.text_field :content, class: 'form-control', required: true
-      = f.error_span(:content)
-      = f.hidden_field :source_id, value: @comment.source_id
-      = f.hidden_field :source_type, value: @comment.source_type
+        = f.text_area :content, class: 'form-control', required: true
+        = f.error_span(:content)
+        = f.hidden_field :source_id, value: @comment.source_id
+        = f.hidden_field :source_type, value: @comment.source_type
     .form-group
       .col-lg-offset-2.col-lg-10
         = f.submit nil,class: 'btn btn-primary'
